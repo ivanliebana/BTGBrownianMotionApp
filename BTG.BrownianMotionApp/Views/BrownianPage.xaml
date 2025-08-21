@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:conv="clr-namespace:BTG.BrownianMotionApp.Converters"
+             xmlns:behaviors="clr-namespace:BTG.BrownianMotionApp.Behaviors"
+             x:Class="BTG.BrownianMotionApp.Views.BrownianPage"
+             Title="Simulação de Movimento Browniano"
+             BackgroundColor="#0E0E10"
+             Padding="24">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <conv:PercentDisplayConverter x:Key="PercentConverter" />
+            <conv:LessThanConverter x:Key="LessThan" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
+
+
+        <!-- Body -->
+        <Grid x:Name="BodyGrid"
+          Grid.Row="1"
+          RowDefinitions="*,Auto"
+          ColumnDefinitions="2*,1*"
+          ColumnSpacing="24">
+
+            <!-- CARD DO GRÁFICO -->
+            <Border x:Name="ChartCard"
+              Grid.Row="0"
+              Grid.Column="0"
+              Grid.ColumnSpan="1"
+              BackgroundColor="#1E1F26"
+              StrokeThickness="0"
+              StrokeShape="RoundRectangle 18"
+              Padding="16">
+                <Grid>
+                    <GraphicsView x:Name="ChartView"
+                        HeightRequest="520"
+                        HorizontalOptions="Fill"
+                        VerticalOptions="Fill" />
+                    <Label Text="Execute a simulação para ver o gráfico"
+                 IsVisible="{Binding IsEmpty}"
+                 HorizontalOptions="Center"
+                 VerticalOptions="Center"
+                 TextColor="#B9B9C4"
+                 FontAttributes="Italic"/>
+                </Grid>
+            </Border>
+
+            <!-- PAINEL: parâmetros + personalização -->
+            <ScrollView x:Name="ParamsScroll"
+                  Grid.Row="0"
+                  Grid.Column="1">
+                <VerticalStackLayout Spacing="14" Padding="4" VerticalOptions="Start">
+
+                    <!-- Parâmetros -->
+                    <Label Text="Parâmetros" TextColor="#EDEDF6" FontAttributes="Bold" />
+
+                    <!-- Preço inicial -->
+                    <Label Text="Preço inicial" TextColor="White" />
+                    <Border Stroke="#2E2F37" StrokeThickness="1" StrokeShape="RoundRectangle 8"
+                  BackgroundColor="#121216" Padding="10,0">
+                        <Entry Text="{Binding InitialPrice, Mode=TwoWay, StringFormat='{}{0:F0}'}"
+                   Keyboard="Numeric" BackgroundColor="Transparent" TextColor="White"
+                   Placeholder="100" PlaceholderColor="#7E7F8A" HeightRequest="40">
+                            <Entry.Behaviors>
+                                <behaviors:DigitsOnlyBehavior />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </Border>
+                    <Slider Minimum="10" Maximum="10000"
+                  Value="{Binding InitialPrice, Mode=TwoWay}" />
+
+                    <!-- Volatilidade média (%) -->
+                    <Label Text="Volatilidade média (%)" TextColor="White" />
+                    <Border Stroke="#2E2F37" StrokeThickness="1" StrokeShape="RoundRectangle 8"
+                  BackgroundColor="#121216" Padding="10,0">
+                        <Entry Text="{Binding Volatility, Mode=TwoWay, Converter={StaticResource PercentConverter}}"
+                   Keyboard="Numeric" BackgroundColor="Transparent" TextColor="White"
+                   Placeholder="20" PlaceholderColor="#7E7F8A" HeightRequest="40">
+                            <Entry.Behaviors>
+                                <behaviors:IntegerOrCommaDecimalBehavior AllowNegative="False" MaxFractionDigits="1" />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </Border>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <Slider Grid.Column="0" Minimum="0" Maximum="1"
+                    Value="{Binding Volatility, Mode=TwoWay}" />
+                        <Label Grid.Column="1"
+                   Text="{Binding Volatility, Converter={StaticResource PercentConverter}}"
+                   TextColor="#B9B9C4" />
+                    </Grid>
+
+                    <!-- Retorno médio diário (%) -->
+                    <Label Text="Retorno médio diário (%)" TextColor="White" />
+                    <Border Stroke="#2E2F37" StrokeThickness="1" StrokeShape="RoundRectangle 8"
+                  BackgroundColor="#121216" Padding="10,0">
+                        <Entry Text="{Binding MeanReturn, Mode=TwoWay, Converter={StaticResource PercentConverter}}"
+                   Keyboard="Numeric" BackgroundColor="Transparent" TextColor="White"
+                   Placeholder="1" PlaceholderColor="#7E7F8A" HeightRequest="40">
+                            <Entry.Behaviors>
+                                <behaviors:IntegerOrCommaDecimalBehavior AllowNegative="False" MaxFractionDigits="1" />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </Border>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <Slider Grid.Column="0" Minimum="-0.5" Maximum="0.5"
+                    Value="{Binding MeanReturn, Mode=TwoWay}" />
+                        <Label Grid.Column="1"
+                   Text="{Binding MeanReturn, Converter={StaticResource PercentConverter}}"
+                   TextColor="#B9B9C4" />
+                    </Grid>
+
+                    <!-- Tempo (dias) -->
+                    <Label Text="Tempo (dias)" TextColor="White" />
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <Border Grid.Column="0" Stroke="#2E2F37" StrokeThickness="1" StrokeShape="RoundRectangle 8"
+                    BackgroundColor="#121216" Padding="10,0">
+                            <Entry Text="{Binding Steps, Mode=TwoWay}"
+                     Keyboard="Numeric" BackgroundColor="Transparent" TextColor="White"
+                     Placeholder="252" PlaceholderColor="#7E7F8A" HeightRequest="40">
+                                <Entry.Behaviors>
+                                    <behaviors:DigitsOnlyBehavior />
+                                </Entry.Behaviors>
+                            </Entry>
+                        </Border>
+                        <Stepper Grid.Column="1" Minimum="16" Maximum="4096" Increment="16" BackgroundColor="#2A2B33"
+                     Value="{Binding Steps, Mode=TwoWay}" />
+                    </Grid>
+
+                    <!-- Simulações -->
+                    <Label Text="Simulações" TextColor="White" />
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <Border Grid.Column="0" Stroke="#2E2F37" StrokeThickness="1" StrokeShape="RoundRectangle 8"
+                    BackgroundColor="#121216" Padding="10,0">
+                            <Entry Text="{Binding Simulations, Mode=TwoWay}"
+                     Keyboard="Numeric" BackgroundColor="Transparent" TextColor="White"
+                     Placeholder="1" PlaceholderColor="#7E7F8A" HeightRequest="40">
+                                <Entry.Behaviors>
+                                    <behaviors:DigitsOnlyBehavior />
+                                </Entry.Behaviors>
+                            </Entry>
+                        </Border>
+                        <Stepper Grid.Column="1" Minimum="1" Maximum="20" Increment="1" BackgroundColor="#2A2B33"
+                     Value="{Binding Simulations, Mode=TwoWay}" />
+                    </Grid>
+
+                    <!-- Personalização -->
+                    <Label Text="Personalização do gráfico" TextColor="#EDEDF6" FontAttributes="Bold" Margin="0,10,0,0"/>
+
+                    <!-- Mostrar eixos -->
+                    <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="0">
+                        <Switch x:Name="AxesSwitch"
+                              IsToggled="{Binding ShowAxes}"
+                              VerticalOptions="Center"
+                              HorizontalOptions="Start"
+                              WidthRequest="56"
+                              MinimumWidthRequest="0" />
+                                            <Label Grid.Column="1"
+                             Text="Mostrar eixos"
+                             TextColor="#B9B9C4"
+                             VerticalTextAlignment="Center"
+                             Margin="-6,0,0,0" />
+                    </Grid>
+
+                    <!-- Cor base -->
+                    <Label Text="Cor base" TextColor="White" />
+                    <Picker ItemsSource="{Binding ColorOptions}" SelectedItem="{Binding SelectedColorName}"
+                  Title="Escolha uma cor" TitleColor="White" TextColor="Black" />
+
+                    <!-- Estilo de linha -->
+                    <Label Text="Estilo de linha" TextColor="White" />
+                    <Picker ItemsSource="{Binding LineStyleOptions}" SelectedItem="{Binding SelectedLineStyle}"
+                  Title="Sólida / Tracejada / Pontilhada" TitleColor="White" TextColor="Black" />
+
+                    <!-- Espessura -->
+                    <Label Text="Espessura da linha" TextColor="White" />
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <Slider Grid.Column="0" Minimum="1" Maximum="6"
+                    Value="{Binding LineThickness, Mode=TwoWay}" />
+                        <Label Grid.Column="1" Text="{Binding LineThickness, StringFormat='{}{0:F0}px'}"
+                   TextColor="#B9B9C4" />
+                    </Grid>
+
+                    <!-- Ações -->
+                    <Button Text="Gerar simulação"
+                  Command="{Binding RunCommand}"
+                  HeightRequest="44" CornerRadius="10"
+                  BackgroundColor="#E5E6FF" TextColor="#1A1A1F" FontAttributes="Bold"/>
+
+                    <Button Text="Limpar"
+                  Command="{Binding ClearCommand}"
+                  HeightRequest="40" CornerRadius="10"
+                  BackgroundColor="#2A2B33" TextColor="#ECECEC" />
+                </VerticalStackLayout>
+            </ScrollView>
+
+        </Grid>
+    </Grid>
+</ContentPage>
