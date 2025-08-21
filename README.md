@@ -23,6 +23,7 @@ Aplicação desktop em **.NET MAUI** (Windows/macOS) para simular **caminhos de 
 - [Testes (xUnit)](#testes-xunit)
 - [Publicação](#publicação)
 - [Roadmap](#roadmap)
+- [Telas do App](#Telas-do-app)
 
 ---
 
@@ -239,5 +240,7 @@ ChartView.Drawable = vm.ChartDrawable;
 vm.RequestRedraw += (_, __) => ChartView.Invalidate();
 ```
 
+---
+
 ## Telas do App 
-  ![Lista](docs/images/Main.png)
+  ![Main](docs/images/Main.png)
