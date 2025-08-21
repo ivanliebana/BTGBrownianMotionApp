@@ -2,7 +2,7 @@
 
 Aplicação desktop em **.NET MAUI** (Windows/macOS) para simular **caminhos de preço** via Movimento Browniano Geométrico (GBM) simplificado, com **múltiplas simulações**, **gráfico customizável** (cores, estilo e espessura de linha), **eixos com escala e rótulos**, **entradas enriquecidas** (Slider/Stepper) e **responsividade**.
 
-> **Stack**: .NET 9, .NET MAUI, WinUI 3 (Windows) / Mac Catalyst (macOS).  
+> **Stack**: .NET 9, .NET MAUI, WinUI 3 (Windows).  
 > **Padrão**: MVVM + DI, desenho custom com `GraphicsView` (`IDrawable`).
 
 ---
@@ -33,7 +33,7 @@ Aplicação desktop em **.NET MAUI** (Windows/macOS) para simular **caminhos de 
   ```bash
   dotnet workload install maui
   ```
-- **Windows 10 2004 (build 19041)+** para WinUI 3 (ou macOS para Mac Catalyst).
+- **Windows 10 2004 (build 19041)+** para WinUI 3.
 - **IDE**: Visual Studio (com .NET MAUI) **ou** VS Code + CLI.
 
 ---
@@ -49,7 +49,7 @@ dotnet build -t:Run -f net9.0-windows10.0.19041.0
 
 ### Via Visual Studio
 1. Selecione o projeto **.NET MAUI**.
-2. Escolha o alvo **Windows** (ou **Mac Catalyst**).
+2. Escolha o alvo **Windows**.
 3. Pressione **F5** (depurar) ou **Ctrl+F5** (executar).
 
 > **DI obrigatório** (em `MauiProgram.cs`):
@@ -209,11 +209,6 @@ dotnet test .\BTG.ClientsApp.Tests```
 dotnet publish -f net9.0-windows10.0.19041.0 -c Release -p:WindowsPackageType=None
 ```
 Saída típica: `bin/Release/net9.0-windows10.0.19041.0/win10-x64/publish/`
-
-### macOS (Mac Catalyst)
-```bash
-dotnet publish -f net9.0-maccatalyst -c Release
-```
 
 > Para MSIX/assinatura, use o Visual Studio (Propriedades do projeto) ou parâmetros adicionais de `publish`.
 
