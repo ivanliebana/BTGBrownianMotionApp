@@ -238,3 +238,6 @@ builder.Services.AddSingleton<BrownianPage>();
 ChartView.Drawable = vm.ChartDrawable;
 vm.RequestRedraw += (_, __) => ChartView.Invalidate();
 ```
+
+## Telas do App 
+  ![Lista](docs/images/Main.png)
